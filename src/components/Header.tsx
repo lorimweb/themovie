@@ -5,7 +5,18 @@ const Header = () => {
   const navigate = useNavigate();
 
   return (
-    <Layout.Header style={{ background: '#1a1a1a', padding: '1rem', display: 'flex', alignItems: 'center' }}>
+    <Layout.Header 
+      style={{ 
+        background: '#1a1a1a', 
+        padding: '1rem', 
+        display: 'flex', 
+        alignItems: 'center',
+        position: 'fixed',
+        width: '100%',
+        top: 0,
+        zIndex: 1000
+      }}
+    >
       <Layout.Content style={{ maxWidth: 1200, margin: '0 auto', padding: '24px 0' }}>
         <Typography.Title
           level={2}
