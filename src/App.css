@@ -1,0 +1,125 @@
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
+}
+
+/* Movie Carousel Styles */
+.movie-carousel {
+  position: relative;
+}
+
+.movie-carousel .ant-carousel {
+  margin: 0 auto;
+}
+
+.movie-carousel .ant-carousel .slick-dots {
+  bottom: -30px;
+}
+
+.movie-carousel .ant-carousel .slick-dots li button {
+  background: #d9292a;
+  opacity: 0.4;
+  height: 8px;
+  width: 8px;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.movie-carousel .ant-carousel .slick-dots li.slick-active button {
+  opacity: 1;
+  width: 24px;
+}
+
+/* Banner Carousel Styles */
+.banner-carousel .ant-carousel {
+  margin-bottom: 24px;
+}
+
+.banner-carousel .ant-carousel .slick-dots {
+  bottom: 20px;
+  z-index: 1;
+}
+
+.banner-carousel .ant-carousel .slick-dots li button {
+  background: white;
+  opacity: 0.5;
+  height: 8px;
+  width: 8px;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.banner-carousel .ant-carousel .slick-dots li.slick-active button {
+  opacity: 1;
+  width: 24px;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 576px) {
+  .movie-carousel .ant-carousel {
+    margin: 0 -8px;
+  }
+  
+  .banner-carousel .ant-carousel .slick-dots {
+    bottom: 10px;
+  }
+  
+  .banner-carousel .ant-carousel .slick-dots li button {
+    height: 6px;
+    width: 6px;
+  }
+  
+  .banner-carousel .ant-carousel .slick-dots li.slick-active button {
+    width: 18px;
+  }
+}
+
+@media (min-width: 577px) and (max-width: 768px) {
+  .movie-carousel .ant-carousel {
+    margin: 0 -12px;
+  }
+}
+
+@media (min-width: 769px) {
+  .movie-carousel .ant-carousel {
+    margin: 0 -16px;
+  }
+}
