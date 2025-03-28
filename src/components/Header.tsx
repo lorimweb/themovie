@@ -6,7 +6,7 @@ const Header = () => {
 
   return (
     <Layout.Header style={{ background: '#1a1a1a', padding: '1rem', display: 'flex', alignItems: 'center' }}>
-      <Layout.Content style={{ maxWidth: 1200, margin: '0 auto', padding: '24px' }}>
+      <Layout.Content style={{ maxWidth: 1200, margin: '0 auto', padding: '24px 0' }}>
         <Typography.Title
           level={2}
           style={{

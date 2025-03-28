@@ -15,7 +15,7 @@ function App() {
       <Layout style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', backgroundColor: '#1a1a1a' }}>
         <Menu />
         <Banner />
-        <Content style={{ maxWidth: 1200, margin: '0 auto', padding: '24px', flex: '1 0 auto' }}>
+        <Content style={{ maxWidth: 1200, margin: '0 auto', padding: '24px 0', flex: '1 0 auto' }}>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/movie/:id" element={<MovieDetail />} />
