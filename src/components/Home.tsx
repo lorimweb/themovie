@@ -1,19 +1,18 @@
 import {
   Alert,
+  AutoComplete,
   Carousel,
   Col,
-  Input,
   Row,
   Space,
   Spin,
   Grid,
 } from 'antd'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useState, useRef } from 'react'
 import { getPopularMovies, searchMovies } from '../services/api'
 import type { Movie } from '../types/movie'
 import MovieItem from './MovieItem'
 
-const { Search } = Input;
 const { useBreakpoint } = Grid;
 
 const getMoviesPerSlide = (screens: any) => {
@@ -28,9 +27,11 @@ const getMoviesPerSlide = (screens: any) => {
 const Home = () => {
   const [movies, setMovies] = useState<Movie[]>([])
   const [searchQuery, setSearchQuery] = useState('')
+  const [options, setOptions] = useState<{ value: string }[]>([])
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
   const screens = useBreakpoint();
+  const searchTimeoutRef = useRef<NodeJS.Timeout | undefined>(undefined);
 
   const fetchMovies = useCallback(async (query?: string) => {
     setIsLoading(true)
@@ -38,6 +39,11 @@ const Home = () => {
     try {
       const response = await (query ? searchMovies(query) : getPopularMovies())
       setMovies(response.data.results)
+      if (query) {
+        setOptions(response.data.results.map((movie: Movie) => ({
+          value: movie.title,
+        })))
+      }
     } catch (error) {
       setError(query
         ? 'Failed to search movies. Please try again.'
@@ -53,13 +59,37 @@ const Home = () => {
     fetchMovies()
   }, [fetchMovies])
 
-  const handleSearch = (value: string) => {
+  const handleSearch = useCallback((value: string) => {
     setSearchQuery(value)
-    if (!value) {
-      fetchMovies()
-    } else {
-      fetchMovies(value)
+    
+    // Clear the previous timeout
+    if (searchTimeoutRef.current) {
+      clearTimeout(searchTimeoutRef.current)
     }
+
+    // Set a new timeout
+    searchTimeoutRef.current = setTimeout(() => {
+      if (value.length >= 3) {
+        fetchMovies(value)
+      } else if (!value) {
+        fetchMovies()
+        setOptions([])
+      }
+    }, 500) // 500ms delay
+  }, [fetchMovies])
+
+  // Cleanup timeout on component unmount
+  useEffect(() => {
+    return () => {
+      if (searchTimeoutRef.current) {
+        clearTimeout(searchTimeoutRef.current)
+      }
+    }
+  }, [])
+
+  const onSelect = (value: string) => {
+    setSearchQuery(value)
+    fetchMovies(value)
   }
 
   const groupMoviesIntoSlides = (movies: Movie[]) => {
@@ -83,12 +113,14 @@ const Home = () => {
   return (
     <>
       <Space direction="vertical" size="large" style={{ width: '100%' }}>
-        <Search
+        <AutoComplete
           placeholder="Search movies..."
           size="large"
           value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
+          options={options}
+          onSelect={onSelect}
           onSearch={handleSearch}
+          onChange={(value) => setSearchQuery(value)}
           style={{ width: '100%', marginBottom: 24 }}
         />
 
