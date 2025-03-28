@@ -9,7 +9,7 @@ const { useBreakpoint } = Grid;
 const Banner = () => {
   const [movies, setMovies] = useState<Movie[]>([]);
   const screens = useBreakpoint();
-  
+
   const fetchMovies = useCallback(async (query?: string) => {
     try {
       const response = await (query ? searchMovies(query) : getPopularMovies())
@@ -37,7 +37,7 @@ const Banner = () => {
   };
 
   return (
-    <div className="banner-carousel">
+    <div className="banner-carousel" style={{ marginTop: '64px' }}>
       <Carousel
         autoplay={true}
         effect="fade"
@@ -81,21 +81,21 @@ const Banner = () => {
                   maxWidth: 1200,
                   margin: '0 auto',
                 }}>
-                  <Title 
-                    level={screens.xs ? 3 : 2} 
-                    style={{ 
-                      color: 'white', 
+                  <Title
+                    level={screens.xs ? 3 : 2}
+                    style={{
+                      color: 'white',
                       margin: 0,
                       fontSize: screens.xs ? '1.5rem' : screens.sm ? '2rem' : '2.5rem'
                     }}
                   >
                     {movie.title}
                   </Title>
-                  <Paragraph 
-                    style={{ 
-                      color: 'rgba(255,255,255,0.8)', 
-                      fontSize: screens.xs ? '0.9em' : '1.1em', 
-                      marginTop: '1em', 
+                  <Paragraph
+                    style={{
+                      color: 'rgba(255,255,255,0.8)',
+                      fontSize: screens.xs ? '0.9em' : '1.1em',
+                      marginTop: '1em',
                       maxWidth: screens.xs ? '100%' : '600px',
                       display: screens.xs ? '-webkit-box' : 'block',
                       WebkitLineClamp: screens.xs ? 3 : 4,
