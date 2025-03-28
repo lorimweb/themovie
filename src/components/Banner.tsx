@@ -25,7 +25,7 @@ const Banner = () => {
 
   const getBannerHeight = () => {
     if (screens.xs) return '300px';
-    if (screens.sm) return '400px';
+    if (screens.sm) return '600px';
     if (screens.md) return '500px';
     return '600px';
   };
