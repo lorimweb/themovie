@@ -16,6 +16,7 @@ const MovieItem = ({ movie }: MovieItemProps) => {
       hoverable
       size="small"
       onClick={() => navigate(`/movie/${movie.id}`)}
+      style={{ border: '3px solid white', height: '259px' }}
       cover={
         <img
           alt={movie.title}
@@ -26,7 +27,8 @@ const MovieItem = ({ movie }: MovieItemProps) => {
             width: '100%',
             height: 'auto',
             aspectRatio: '2/3',
-            objectFit: 'cover'
+            objectFit: 'cover',
+            borderRadius: '5px',
           }}
         />
       }
