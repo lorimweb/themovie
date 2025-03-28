@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Container, Row, Col, Button, Card, Spinner, Badge } from 'react-bootstrap';
 import { FaStar, FaStarHalfAlt, FaRegStar } from 'react-icons/fa';
+import { useTranslation } from 'react-i18next';
 import { getMovieDetails } from '../services/api';
 import type { Movie } from '../types/movie';
 
@@ -23,6 +24,7 @@ const renderStars = (rating: number) => {
 const MovieDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [movie, setMovie] = useState<Movie | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -46,7 +48,7 @@ const MovieDetail = () => {
     return (
       <Container className="text-center py-5">
         <Spinner animation="border" role="status">
-          <span className="visually-hidden">Loading...</span>
+          <span className="visually-hidden">{t('home.loading')}</span>
         </Spinner>
       </Container>
     );
@@ -68,7 +70,7 @@ const MovieDetail = () => {
         className="mb-4"
         style={{ backgroundColor: '#d9292a' }}
       >
-        Back to Home
+        {t('movieDetail.backToHome')}
       </Button>
       
       <Row className="g-4">
@@ -91,7 +93,7 @@ const MovieDetail = () => {
                 {renderStars(movie.vote_average / 2)}
               </div>
               <span className="text-white">
-                ({movie.vote_average.toFixed(1)}/10 from {movie.vote_count} votes)
+                ({movie.vote_average.toFixed(1)}/10 {t('movieDetail.votes', { count: movie.vote_count })})
               </span>
             </div>
 
@@ -100,12 +102,12 @@ const MovieDetail = () => {
             </Badge>
 
             <div className="text-white">
-              <h5>Overview</h5>
+              <h5>{t('movieDetail.overview')}</h5>
               <p>{movie.overview}</p>
             </div>
 
             <div className="text-white">
-              <h5>Release Date</h5>
+              <h5>{t('movieDetail.releaseDate')}</h5>
               <p className="mb-0">
                 {new Date(movie.release_date).toLocaleDateString()}
               </p>

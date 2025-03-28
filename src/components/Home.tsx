@@ -3,6 +3,7 @@ import { Alert, Form, Spinner } from 'react-bootstrap'
 import { FaSearch } from 'react-icons/fa'
 import Carousel from 'react-multi-carousel'
 import 'react-multi-carousel/lib/styles.css'
+import { useTranslation } from 'react-i18next'
 import { getPopularMovies, searchMovies } from '../services/api'
 import type { Movie } from '../types/movie'
 import MovieItem from './MovieItem'
@@ -35,6 +36,7 @@ const responsive = {
 };
 
 const Home = () => {
+  const { t } = useTranslation();
   const [searchResults, setSearchResults] = useState<Movie[]>([])
   const [popularMovies, setPopularMovies] = useState<Movie[]>([])
   const [searchQuery, setSearchQuery] = useState('')
@@ -99,7 +101,7 @@ const Home = () => {
         <FaSearch className="position-absolute top-50 translate-middle-y ms-3" style={{ zIndex: 1 }} />
         <Form.Control
           type="search"
-          placeholder="Search movies..."
+          placeholder={t('home.searchPlaceholder')}
           value={searchQuery}
           onChange={(e) => handleSearch(e.target.value)}
           className="form-control-lg ps-5"
@@ -115,13 +117,13 @@ const Home = () => {
       {isLoading ? (
         <div className="text-center py-5">
           <Spinner animation="border" role="status">
-            <span className="visually-hidden">Loading...</span>
+            <span className="visually-hidden">{t('home.loading')}</span>
           </Spinner>
         </div>
       ) : (
         <>
           <div className="movie-carousel mb-5">
-            <h3 className="text-white mb-3">Search Results</h3>
+            <h3 className="text-white mb-3">{t('home.searchResults')}</h3>
             <Carousel
               responsive={responsive}
               infinite={false}
@@ -137,7 +139,7 @@ const Home = () => {
           </div>
 
           <div className="movie-carousel">
-            <h3 className="text-white mb-3">Popular Movies</h3>
+            <h3 className="text-white mb-3">{t('home.popularMovies')}</h3>
             <Carousel
               responsive={responsive}
               infinite={false}

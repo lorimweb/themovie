@@ -1,0 +1,21 @@
+{
+  "header": {
+    "title": "O FILME",
+    "language": "Idioma"
+  },
+  "home": {
+    "searchPlaceholder": "Pesquisar filmes...",
+    "searchResults": "Resultados da Pesquisa",
+    "popularMovies": "Filmes Populares",
+    "loading": "Carregando..."
+  },
+  "movieDetail": {
+    "backToHome": "Voltar para Home",
+    "overview": "Sinopse",
+    "releaseDate": "Data de Lançamento",
+    "votes": "de {{count}} votos"
+  },
+  "footer": {
+    "rights": "© {{year}} O Filme. Todos os direitos reservados."
+  }
+}

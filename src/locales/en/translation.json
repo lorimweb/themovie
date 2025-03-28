@@ -1,0 +1,21 @@
+{
+  "header": {
+    "title": "THE MOVIE",
+    "language": "Language"
+  },
+  "home": {
+    "searchPlaceholder": "Search movies...",
+    "searchResults": "Search Results",
+    "popularMovies": "Popular Movies",
+    "loading": "Loading..."
+  },
+  "movieDetail": {
+    "backToHome": "Back to Home",
+    "overview": "Overview",
+    "releaseDate": "Release Date",
+    "votes": "from {{count}} votes"
+  },
+  "footer": {
+    "rights": "© {{year}} The Movie. All rights reserved."
+  }
+}

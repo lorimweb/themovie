@@ -1,0 +1,21 @@
+{
+  "header": {
+    "title": "LA PELÍCULA",
+    "language": "Idioma"
+  },
+  "home": {
+    "searchPlaceholder": "Buscar películas...",
+    "searchResults": "Resultados de Búsqueda",
+    "popularMovies": "Películas Populares",
+    "loading": "Cargando..."
+  },
+  "movieDetail": {
+    "backToHome": "Volver al Inicio",
+    "overview": "Sinopsis",
+    "releaseDate": "Fecha de Estreno",
+    "votes": "de {{count}} votos"
+  },
+  "footer": {
+    "rights": "© {{year}} La Película. Todos los derechos reservados."
+  }
+}

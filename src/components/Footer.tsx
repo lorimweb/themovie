@@ -1,7 +1,9 @@
 import { Container } from 'react-bootstrap';
 import { FaGithub, FaTwitter, FaLinkedin } from 'react-icons/fa';
+import { useTranslation } from 'react-i18next';
 
 const Footer = () => {
+  const { t } = useTranslation();
   const currentYear = new Date().getFullYear();
 
   return (
@@ -20,7 +22,7 @@ const Footer = () => {
             </a>
           </div>
           <p className="mb-0" style={{ color: 'rgba(255,255,255,0.8)' }}>
-            © {currentYear} The Movie. All rights reserved.
+            {t('footer.rights', { year: currentYear })}
           </p>
         </div>
       </Container>
