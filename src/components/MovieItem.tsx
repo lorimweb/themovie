@@ -1,8 +1,6 @@
-import { Card, Space, Rate, Typography } from 'antd';
+import { Card, Space, Rate } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import type { Movie } from '../types/movie';
-
-const { Paragraph } = Typography;
 
 interface MovieItemProps {
   movie: Movie;
@@ -52,15 +50,13 @@ const MovieItem = ({ movie }: MovieItemProps) => {
                   allowHalf
                   disabled
                   value={movie.vote_average / 2}
+                  style={{
+                    fontSize: '14px',
+                    backgroundColor: 'transparent'
+                  }}
                 />
               </Space>
               <span style={{ color: 'white' }}>({movie.vote_average.toFixed(1)})</span>
-              <Paragraph
-                ellipsis={{ rows: 3 }}
-                style={{ color: 'rgba(255, 255, 255, 0.85)', margin: 0 }}
-              >
-                {movie.overview}
-              </Paragraph>
             </Space>
           }
         />

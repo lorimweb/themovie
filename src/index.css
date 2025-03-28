@@ -17,3 +17,14 @@ body {
 #root {
   width: 100%;
 }
+
+/* Custom Rate Styles */
+.ant-rate-star:not(.ant-rate-star-full) .ant-rate-star-first,
+.ant-rate-star:not(.ant-rate-star-full) .ant-rate-star-second {
+  color: white;
+}
+
+.ant-rate-star-full .ant-rate-star-first,
+.ant-rate-star-full .ant-rate-star-second {
+  color: #fadb14;
+}
