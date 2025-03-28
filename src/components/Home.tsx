@@ -35,48 +35,55 @@ const responsive = {
 };
 
 const Home = () => {
-  const [movies, setMovies] = useState<Movie[]>([])
+  const [searchResults, setSearchResults] = useState<Movie[]>([])
+  const [popularMovies, setPopularMovies] = useState<Movie[]>([])
   const [searchQuery, setSearchQuery] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
   const searchTimeoutRef = useRef<NodeJS.Timeout | undefined>(undefined);
 
-  const fetchMovies = useCallback(async (query?: string) => {
+  const fetchPopularMovies = useCallback(async () => {
+    try {
+      const response = await getPopularMovies()
+      setPopularMovies(response.data.results)
+    } catch (error) {
+      console.error('Error fetching popular movies:', error)
+    }
+  }, [])
+
+  const fetchSearchResults = useCallback(async (query: string) => {
     setIsLoading(true)
     setError('')
     try {
-      const response = await (query ? searchMovies(query) : getPopularMovies())
-      setMovies(response.data.results)
+      const response = await searchMovies(query)
+      setSearchResults(response.data.results)
     } catch (error) {
-      setError(query
-        ? 'Failed to search movies. Please try again.'
-        : 'Failed to fetch popular movies. Please try again later.'
-      )
-      console.error('Error fetching movies:', error)
+      setError('Failed to search movies. Please try again.')
+      console.error('Error searching movies:', error)
     } finally {
       setIsLoading(false)
     }
   }, [])
 
   useEffect(() => {
-    fetchMovies()
-  }, [fetchMovies])
+    fetchPopularMovies()
+  }, [fetchPopularMovies])
 
   const handleSearch = useCallback((value: string) => {
     setSearchQuery(value)
-    
+
     if (searchTimeoutRef.current) {
       clearTimeout(searchTimeoutRef.current)
     }
 
     searchTimeoutRef.current = setTimeout(() => {
       if (value.length >= 3) {
-        fetchMovies(value)
+        fetchSearchResults(value)
       } else if (!value) {
-        fetchMovies()
+        setSearchResults([])
       }
     }, 500)
-  }, [fetchMovies])
+  }, [fetchSearchResults])
 
   useEffect(() => {
     return () => {
@@ -112,20 +119,39 @@ const Home = () => {
           </Spinner>
         </div>
       ) : (
-        <div className="movie-carousel">
-          <Carousel
-            responsive={responsive}
-            infinite={false}
-            draggable
-            swipeable
-            containerClass="py-3"
-            itemClass="px-2"
-          >
-            {movies.map((movie) => (
-              <MovieItem key={movie.id} movie={movie} />
-            ))}
-          </Carousel>
-        </div>
+        <>
+          <div className="movie-carousel mb-5">
+            <h3 className="text-white mb-3">Search Results</h3>
+            <Carousel
+              responsive={responsive}
+              infinite={false}
+              draggable
+              swipeable
+              containerClass="py-3"
+              itemClass="px-2"
+            >
+              {searchResults.map((movie) => (
+                <MovieItem key={movie.id} movie={movie} />
+              ))}
+            </Carousel>
+          </div>
+
+          <div className="movie-carousel">
+            <h3 className="text-white mb-3">Popular Movies</h3>
+            <Carousel
+              responsive={responsive}
+              infinite={false}
+              draggable
+              swipeable
+              containerClass="py-3"
+              itemClass="px-2"
+            >
+              {popularMovies.map((movie) => (
+                <MovieItem key={movie.id} movie={movie} />
+              ))}
+            </Carousel>
+          </div>
+        </>
       )}
     </>
   )
