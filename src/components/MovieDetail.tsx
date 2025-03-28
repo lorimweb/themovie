@@ -1,22 +1,24 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import {
-  Card,
-  Row,
-  Col,
-  Typography,
-  Rate,
-  Space,
-  Tag,
-  Spin,
-  Image,
-  Descriptions,
-  Button
-} from 'antd';
+import { Container, Row, Col, Button, Card, Spinner, Badge } from 'react-bootstrap';
+import { FaStar, FaStarHalfAlt, FaRegStar } from 'react-icons/fa';
 import { getMovieDetails } from '../services/api';
 import type { Movie } from '../types/movie';
 
-const { Title, Paragraph } = Typography;
+const renderStars = (rating: number) => {
+  const stars = [];
+  const roundedRating = Math.round(rating * 2) / 2;
+  for (let i = 1; i <= 5; i++) {
+    if (i <= roundedRating) {
+      stars.push(<FaStar key={i} className="text-warning" />);
+    } else if (i - 0.5 === roundedRating) {
+      stars.push(<FaStarHalfAlt key={i} className="text-warning" />);
+    } else {
+      stars.push(<FaRegStar key={i} className="text-warning" />);
+    }
+  }
+  return stars;
+};
 
 const MovieDetail = () => {
   const { id } = useParams();
@@ -42,76 +44,76 @@ const MovieDetail = () => {
 
   if (loading) {
     return (
-      <div style={{ textAlign: 'center', padding: '50px' }}>
-        <Spin size="large" />
-      </div>
+      <Container className="text-center py-5">
+        <Spinner animation="border" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </Spinner>
+      </Container>
     );
   }
 
   if (!movie) {
     return (
-      <div style={{ textAlign: 'center', padding: '50px' }}>
-        <Title level={3}>Movie not found</Title>
-      </div>
+      <Container className="text-center py-5">
+        <h3>Movie not found</h3>
+      </Container>
     );
   }
 
   return (
-    <Card bordered={false} style={{ background: 'transparent' }}>
+    <Container className="py-4">
       <Button
-        type="primary"
+        variant="danger"
         onClick={() => navigate('/')}
-        style={{ marginBottom: 16, backgroundColor: '#d9292a', borderColor: '#d9292a' }}
+        className="mb-4"
+        style={{ backgroundColor: '#d9292a' }}
       >
         Back to Home
       </Button>
-      <Row gutter={[24, 24]}>
-        <Col xs={24} md={8}>
-          <Image
+      
+      <Row className="g-4">
+        <Col xs={12} md={4}>
+          <Card.Img
             src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
             alt={movie.title}
-            style={{ width: '100%', borderRadius: '8px' }}
-            fallback="https://via.placeholder.com/500x750?text=No+Image"
+            className="rounded"
+            onError={(e: React.SyntheticEvent<HTMLImageElement>) => {
+              e.currentTarget.src = 'https://via.placeholder.com/500x750?text=No+Image';
+            }}
           />
         </Col>
-        <Col xs={24} md={16}>
-          <Space direction="vertical" size="large" style={{ width: '100%' }}>
-            <Title level={2} style={{ margin: 0, color: '#fff' }}>
-              {movie.title}
-            </Title>
+        <Col xs={12} md={8}>
+          <div className="d-flex flex-column gap-4">
+            <h2 className="text-white mb-0">{movie.title}</h2>
 
-            <Space>
-              <Rate
-                allowHalf
-                disabled
-                value={movie.vote_average / 2}
-                style={{ fontSize: 16 }}
-              />
-              <span style={{ color: '#fff' }}>
+            <div className="d-flex align-items-center gap-2">
+              <div className="d-flex">
+                {renderStars(movie.vote_average / 2)}
+              </div>
+              <span className="text-white">
                 ({movie.vote_average.toFixed(1)}/10 from {movie.vote_count} votes)
               </span>
-            </Space>
+            </div>
 
-            <Tag color="blue">{new Date(movie.release_date).getFullYear()}</Tag>
+            <Badge bg="primary" className="w-auto">
+              {new Date(movie.release_date).getFullYear()}
+            </Badge>
 
-            <Descriptions
-              column={1}
-              labelStyle={{ color: '#fff', fontWeight: 'bold' }}
-              contentStyle={{ color: '#rgba(255,255,255,0.85)' }}
-            >
-              <Descriptions.Item label="Overview">
-                <Paragraph style={{ color: '#fff', margin: 0 }}>
-                  {movie.overview}
-                </Paragraph>
-              </Descriptions.Item>
-              <Descriptions.Item label="Release Date">
+            <div className="text-white">
+              <h5>Overview</h5>
+              <p>{movie.overview}</p>
+            </div>
+
+            <div className="text-white">
+              <h5>Release Date</h5>
+              <p className="mb-0">
                 {new Date(movie.release_date).toLocaleDateString()}
-              </Descriptions.Item>
-            </Descriptions>
-          </Space>
+              </p>
+            </div>
+          </div>
         </Col>
       </Row>
-    </Card>
+    </Container>
   );
 };
 

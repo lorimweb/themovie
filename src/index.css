@@ -1,5 +1,3 @@
-@import 'antd/dist/reset.css';
-
 :root {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue',
     Arial, 'Noto Sans', sans-serif;
@@ -18,13 +16,21 @@ body {
   width: 100%;
 }
 
-/* Custom Rate Styles */
-.ant-rate-star:not(.ant-rate-star-full) .ant-rate-star-first,
-.ant-rate-star:not(.ant-rate-star-full) .ant-rate-star-second {
-  color: white;
+/* Custom carousel styles */
+.carousel-indicators {
+  z-index: 2;
 }
 
-.ant-rate-star-full .ant-rate-star-first,
-.ant-rate-star-full .ant-rate-star-second {
-  color: #fadb14;
+.carousel-control-prev,
+.carousel-control-next {
+  z-index: 2;
+}
+
+/* Movie card hover effect */
+.card {
+  transition: transform 0.2s ease-in-out;
+}
+
+.card:hover {
+  transform: scale(1.05);
 }

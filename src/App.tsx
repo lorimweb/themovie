@@ -1,5 +1,5 @@
-import { Layout } from 'antd'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { Container } from 'react-bootstrap'
 import Header from './components/Header'
 import Home from './components/Home'
 import Banner from './components/Banner'
@@ -7,23 +7,21 @@ import Footer from './components/Footer'
 import MovieDetail from './components/MovieDetail'
 import BackToTop from './components/BackToTop'
 
-const { Content } = Layout;
-
 function App() {
   return (
     <BrowserRouter>
-      <Layout style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', backgroundColor: '#1a1a1a' }}>
+      <div className="min-vh-100 d-flex flex-column" style={{ backgroundColor: '#1a1a1a' }}>
         <Header />
         <Banner />
-        <Content style={{ maxWidth: 1200, margin: '0 auto', padding: '24px 0', flex: '1 0 auto' }}>
+        <Container className="py-4 flex-grow-1" style={{ maxWidth: 1200 }}>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/movie/:id" element={<MovieDetail />} />
           </Routes>
-        </Content>
+        </Container>
         <Footer />
         <BackToTop />
-      </Layout>
+      </div>
     </BrowserRouter>
   )
 }

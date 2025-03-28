@@ -1,36 +1,44 @@
-import {
-  Alert,
-  AutoComplete,
-  Carousel,
-  Col,
-  Row,
-  Space,
-  Spin,
-  Grid,
-} from 'antd'
-import { useCallback, useEffect, useState, useRef } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
+import { Alert, Form, Spinner } from 'react-bootstrap'
+import { FaSearch } from 'react-icons/fa'
+import Carousel from 'react-multi-carousel'
+import 'react-multi-carousel/lib/styles.css'
 import { getPopularMovies, searchMovies } from '../services/api'
 import type { Movie } from '../types/movie'
 import MovieItem from './MovieItem'
 
-const { useBreakpoint } = Grid;
-
-const getMoviesPerSlide = (screens: any) => {
-  if (screens.xxl) return 6;
-  if (screens.xl) return 5;
-  if (screens.lg) return 4;
-  if (screens.md) return 3;
-  if (screens.sm) return 2;
-  return 1;
+const responsive = {
+  superLarge: {
+    breakpoint: { max: 4000, min: 1600 },
+    items: 6
+  },
+  desktop: {
+    breakpoint: { max: 1600, min: 1200 },
+    items: 5
+  },
+  laptop: {
+    breakpoint: { max: 1200, min: 992 },
+    items: 4
+  },
+  tablet: {
+    breakpoint: { max: 992, min: 768 },
+    items: 3
+  },
+  mobile: {
+    breakpoint: { max: 768, min: 576 },
+    items: 2
+  },
+  small: {
+    breakpoint: { max: 576, min: 0 },
+    items: 1
+  }
 };
 
 const Home = () => {
   const [movies, setMovies] = useState<Movie[]>([])
   const [searchQuery, setSearchQuery] = useState('')
-  const [options, setOptions] = useState<{ value: string }[]>([])
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
-  const screens = useBreakpoint();
   const searchTimeoutRef = useRef<NodeJS.Timeout | undefined>(undefined);
 
   const fetchMovies = useCallback(async (query?: string) => {
@@ -39,11 +47,6 @@ const Home = () => {
     try {
       const response = await (query ? searchMovies(query) : getPopularMovies())
       setMovies(response.data.results)
-      if (query) {
-        setOptions(response.data.results.map((movie: Movie) => ({
-          value: movie.title,
-        })))
-      }
     } catch (error) {
       setError(query
         ? 'Failed to search movies. Please try again.'
@@ -62,23 +65,19 @@ const Home = () => {
   const handleSearch = useCallback((value: string) => {
     setSearchQuery(value)
     
-    // Clear the previous timeout
     if (searchTimeoutRef.current) {
       clearTimeout(searchTimeoutRef.current)
     }
 
-    // Set a new timeout
     searchTimeoutRef.current = setTimeout(() => {
       if (value.length >= 3) {
         fetchMovies(value)
       } else if (!value) {
         fetchMovies()
-        setOptions([])
       }
-    }, 500) // 500ms delay
+    }, 500)
   }, [fetchMovies])
 
-  // Cleanup timeout on component unmount
   useEffect(() => {
     return () => {
       if (searchTimeoutRef.current) {
@@ -87,88 +86,47 @@ const Home = () => {
     }
   }, [])
 
-  const onSelect = (value: string) => {
-    setSearchQuery(value)
-    fetchMovies(value)
-  }
-
-  const groupMoviesIntoSlides = (movies: Movie[]) => {
-    const moviesPerSlide = getMoviesPerSlide(screens);
-    return movies.reduce((acc: Movie[][], movie, index) => {
-      const slideIndex = Math.floor(index / moviesPerSlide);
-      if (!acc[slideIndex]) {
-        acc[slideIndex] = [];
-      }
-      acc[slideIndex].push(movie);
-      return acc;
-    }, []);
-  };
-
-  const getResponsiveGutter = (): [number, number] => {
-    if (screens.xs) return [8, 8];
-    if (screens.sm) return [16, 16];
-    return [24, 24];
-  };
-
   return (
     <>
-      <Space direction="vertical" size="large" style={{ width: '100%' }}>
-        <AutoComplete
+      <div className="position-relative mb-4">
+        <FaSearch className="position-absolute top-50 translate-middle-y ms-3" style={{ zIndex: 1 }} />
+        <Form.Control
+          type="search"
           placeholder="Search movies..."
-          size="large"
           value={searchQuery}
-          options={options}
-          onSelect={onSelect}
-          onSearch={handleSearch}
-          onChange={(value) => setSearchQuery(value)}
-          style={{ width: '100%', marginBottom: 24 }}
+          onChange={(e) => handleSearch(e.target.value)}
+          className="form-control-lg ps-5"
         />
+      </div>
 
-        {error && (
-          <Alert
-            message={error}
-            type="error"
-            showIcon
-            style={{ marginBottom: 16 }}
-          />
-        )}
+      {error && (
+        <Alert variant="danger" className="mb-4">
+          {error}
+        </Alert>
+      )}
 
-        {isLoading ? (
-          <div style={{ textAlign: 'center', padding: '40px 0' }}>
-            <Spin size="large" />
-          </div>
-        ) : (
-          <div className="movie-carousel">
-            <Carousel
-              dots={true}
-              style={{ margin: '0 -8px', padding: '20px 0px' }}
-              swipeToSlide
-              draggable
-            >
-              {groupMoviesIntoSlides(movies).map((slideMovies, slideIndex) => (
-                <div key={slideIndex}>
-                  <Row gutter={getResponsiveGutter()}>
-                    {slideMovies.map((movie) => (
-                      <Col 
-                        xs={24} 
-                        sm={12} 
-                        md={8} 
-                        lg={6} 
-                        xl={screens.xxl ? 4 : 6} 
-                        key={movie.id}
-                      >
-                        <div style={{ padding: '0 8px' }}>
-                          <MovieItem movie={movie} />
-                        </div>
-                      </Col>
-                    ))}
-                  </Row>
-                </div>
-              ))}
-            </Carousel>
-          </div>
-        )}
-      </Space>
+      {isLoading ? (
+        <div className="text-center py-5">
+          <Spinner animation="border" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </Spinner>
+        </div>
+      ) : (
+        <div className="movie-carousel">
+          <Carousel
+            responsive={responsive}
+            infinite={false}
+            draggable
+            swipeable
+            containerClass="py-3"
+            itemClass="px-2"
+          >
+            {movies.map((movie) => (
+              <MovieItem key={movie.id} movie={movie} />
+            ))}
+          </Carousel>
+        </div>
+      )}
     </>
   )
 }

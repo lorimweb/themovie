@@ -1,14 +1,12 @@
-import { Carousel, Typography, Grid } from 'antd';
+import { Carousel, Container } from 'react-bootstrap';
 import { Movie } from '../types/movie';
 import { useCallback, useEffect, useState } from 'react';
 import { getPopularMovies, searchMovies } from '../services/api';
-
-const { Title, Paragraph } = Typography;
-const { useBreakpoint } = Grid;
+import 'animate.css';
 
 const Banner = () => {
   const [movies, setMovies] = useState<Movie[]>([]);
-  const screens = useBreakpoint();
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
   const fetchMovies = useCallback(async (query?: string) => {
     try {
@@ -23,29 +21,41 @@ const Banner = () => {
     fetchMovies()
   }, [fetchMovies])
 
+  useEffect(() => {
+    const handleResize = () => setWindowWidth(window.innerWidth);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   const getBannerHeight = () => {
-    if (screens.xs) return '300px';
-    if (screens.sm) return '600px';
-    if (screens.md) return '500px';
-    return '600px';
+    if (windowWidth < 576) return '300px'; // xs
+    if (windowWidth < 768) return '600px'; // sm
+    if (windowWidth < 992) return '500px'; // md
+    return '600px'; // lg and above
   };
 
   const getContentPadding = () => {
-    if (screens.xs) return '20px';
-    if (screens.sm) return '40px';
-    return '60px';
+    if (windowWidth < 576) return '20px'; // xs
+    if (windowWidth < 768) return '40px'; // sm
+    return '60px'; // md and above
+  };
+
+  const getFontSize = () => {
+    if (windowWidth < 576) return { title: '1.5rem', text: '0.9rem' }; // xs
+    if (windowWidth < 768) return { title: '2rem', text: '1rem' }; // sm
+    return { title: '2.5rem', text: '1.1rem' }; // md and above
   };
 
   return (
-    <div className="banner-carousel" style={{ marginTop: '64px' }}>
-      <Carousel
-        autoplay={true}
-        effect="fade"
-        dots={true}
-        autoplaySpeed={5000}
+    <div className="banner-carousel" style={{ marginTop: '60px' }}>
+      <Carousel 
+        controls={true}
+        indicators={true}
+        interval={5000}
+        fade
       >
         {movies.slice(0, 5).map((movie) => (
-          <div key={movie.id}>
+          <Carousel.Item key={movie.id} className="animate__animated animate__fadeIn">
             <div
               style={{
                 height: getBannerHeight(),
@@ -77,38 +87,33 @@ const Banner = () => {
                   color: 'white',
                 }}
               >
-                <div style={{
-                  maxWidth: 1200,
-                  margin: '0 auto',
-                }}>
-                  <Title
-                    level={screens.xs ? 3 : 2}
+                <Container style={{ maxWidth: 1200 }}>
+                  <h2
+                    className="mb-3"
                     style={{
                       color: 'white',
-                      margin: 0,
-                      fontSize: screens.xs ? '1.5rem' : screens.sm ? '2rem' : '2.5rem'
+                      fontSize: getFontSize().title,
                     }}
                   >
                     {movie.title}
-                  </Title>
-                  <Paragraph
+                  </h2>
+                  <p
                     style={{
                       color: 'rgba(255,255,255,0.8)',
-                      fontSize: screens.xs ? '0.9em' : '1.1em',
-                      marginTop: '1em',
-                      maxWidth: screens.xs ? '100%' : '600px',
-                      display: screens.xs ? '-webkit-box' : 'block',
-                      WebkitLineClamp: screens.xs ? 3 : 4,
+                      fontSize: getFontSize().text,
+                      maxWidth: windowWidth < 576 ? '100%' : '600px',
+                      display: '-webkit-box',
+                      WebkitLineClamp: windowWidth < 576 ? 3 : 4,
                       WebkitBoxOrient: 'vertical',
                       overflow: 'hidden'
                     }}
                   >
                     {movie.overview}
-                  </Paragraph>
-                </div>
+                  </p>
+                </Container>
               </div>
             </div>
-          </div>
+          </Carousel.Item>
         ))}
       </Carousel>
     </div>

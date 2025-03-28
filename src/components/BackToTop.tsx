@@ -1,13 +1,12 @@
 import { useState, useEffect } from 'react';
-import { Button } from 'antd';
-import { UpOutlined } from '@ant-design/icons';
+import { Button } from 'react-bootstrap';
+import { FaArrowUp } from 'react-icons/fa';
 import { scrollToTop } from '../utils/utils';
 
 const BackToTop = () => {
   const [isVisible, setIsVisible] = useState(false);
   const isMobile = window.innerWidth <= 768;
 
-  // Show button when page is scrolled up to given distance
   const toggleVisibility = () => {
     if (window.scrollY > 300) {
       setIsVisible(true);
@@ -16,24 +15,21 @@ const BackToTop = () => {
     }
   };
 
-  // Set the scroll event listener
   useEffect(() => {
     window.addEventListener('scroll', toggleVisibility);
     return () => window.removeEventListener('scroll', toggleVisibility);
   }, []);
 
-  // Scroll to top smoothly
   const goToTop = () => {
-    scrollToTop(0, 'smooth')
+    scrollToTop(0, 'smooth');
   };
 
   return (
     <>
       {isVisible && (
         <Button
-          type="primary"
-          shape="circle"
-          icon={<UpOutlined />}
+          variant="danger"
+          className="rounded-circle d-flex align-items-center justify-content-center"
           onClick={goToTop}
           style={{
             position: 'fixed',
@@ -44,8 +40,11 @@ const BackToTop = () => {
             height: isMobile ? '36px' : '40px',
             opacity: 0.8,
             backgroundColor: '#d9292a',
+            padding: 0
           }}
-        />
+        >
+          <FaArrowUp />
+        </Button>
       )}
     </>
   );
