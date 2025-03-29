@@ -1,7 +1,7 @@
 import { Carousel } from 'react-bootstrap';
 import { Movie } from '../../types/movie';
 import { useCallback, useEffect, useState } from 'react';
-import { getPopularMovies, searchMovies } from '../../services/api';
+import { getPopularMovies, searchMovies } from '../../services/movie.service';
 import 'animate.css';
 import {
   BannerWrapper,

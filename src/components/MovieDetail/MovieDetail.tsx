@@ -1,24 +1,23 @@
 import { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { Row, Col, Spinner, Card } from 'react-bootstrap';
-import { FaStar, FaStarHalfAlt, FaRegStar } from 'react-icons/fa';
+import { Card, Col, Row, Spinner } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import { getMovieDetails } from '../../services/api';
+import { useNavigate, useParams } from 'react-router-dom';
+import { getMovieDetails } from '../../services/movie.service';
 import type { Movie } from '../../types/movie';
+import { renderStars } from '../../utils/utils';
 import {
-  StyledContainer,
   BackButton,
   MovieCard,
   MovieInfo,
+  MovieTitle,
   RatingContainer,
   RatingStars,
   RatingText,
-  MovieTitle,
-  SectionTitle,
   SectionText,
+  SectionTitle,
+  StyledContainer,
   YearBadge
 } from './MovieDetail.styles';
-import { renderStars } from '../../utils/utils';
 
 const MovieDetail = () => {
   const { id } = useParams();

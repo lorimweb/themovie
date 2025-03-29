@@ -10,7 +10,3 @@ export const api = axios.create({
 		api_key: API_KEY,
 	},
 });
-
-export const getPopularMovies = () => api.get('/movie/popular');
-export const searchMovies = (query: string) => api.get('/search/movie', { params: { query } });
-export const getMovieDetails = (movieId: number) => api.get(`/movie/${movieId}`);

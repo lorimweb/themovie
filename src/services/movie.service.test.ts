@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { api, getPopularMovies, searchMovies, getMovieDetails } from '../api';
-import type { Movie, MovieResponse } from '../../types/movie';
+import type { Movie, MovieResponse } from '../types/movie';
+import { api } from '../config/axios';
+import { getMovieDetails, getPopularMovies, searchMovies } from './movie.service';
 
 // Mock the axios instance
 vi.mock('axios', () => ({
