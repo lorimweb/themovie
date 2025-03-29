@@ -8,6 +8,7 @@ import { getPopularMovies, searchMovies } from '../../services/api'
 import type { Movie } from '../../types/movie'
 import { responsive } from '../../mocks/carousel.mock'
 import MovieItem from '../MovieItem/MovieItem'
+import { SearchContainer, CarouselSection, LoadingContainer } from './Home.styles'
 
 const Home = () => {
   const { t } = useTranslation();
@@ -71,16 +72,16 @@ const Home = () => {
 
   return (
     <>
-      <div className="position-relative mb-4">
-        <FaSearch className="position-absolute top-50 translate-middle-y ms-3" style={{ zIndex: 1 }} />
+      <SearchContainer>
+        <FaSearch className="search-icon" />
         <Form.Control
           type="search"
           placeholder={t('home.searchPlaceholder')}
           value={searchQuery}
           onChange={(e) => handleSearch(e.target.value)}
-          className="form-control-lg ps-5"
+          className="form-control-lg"
         />
-      </div>
+      </SearchContainer>
 
       {error && (
         <Alert variant="danger" className="mb-4">
@@ -89,15 +90,15 @@ const Home = () => {
       )}
 
       {isLoading ? (
-        <div className="text-center py-5">
+        <LoadingContainer>
           <Spinner animation="border" role="status">
             <span className="visually-hidden">{t('home.loading')}</span>
           </Spinner>
-        </div>
+        </LoadingContainer>
       ) : (
         <>
-          <div className="movie-carousel mb-5">
-            <h3 className="text-white mb-3">{t('home.searchResults')}</h3>
+          <CarouselSection>
+            <h3>{t('home.searchResults')}</h3>
             <Carousel
               responsive={responsive}
               infinite={false}
@@ -110,10 +111,10 @@ const Home = () => {
                 <MovieItem key={movie.id} movie={movie} />
               ))}
             </Carousel>
-          </div>
+          </CarouselSection>
 
-          <div className="movie-carousel">
-            <h3 className="text-white mb-3">{t('home.popularMovies')}</h3>
+          <CarouselSection>
+            <h3>{t('home.popularMovies')}</h3>
             <Carousel
               responsive={responsive}
               infinite={false}
@@ -126,7 +127,7 @@ const Home = () => {
                 <MovieItem key={movie.id} movie={movie} />
               ))}
             </Carousel>
-          </div>
+          </CarouselSection>
         </>
       )}
     </>
