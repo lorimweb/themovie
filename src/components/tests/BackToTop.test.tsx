@@ -1,6 +1,6 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import BackToTop from '../BackToTop';
+import BackToTop from '../BackToTop/BackToTop';
 import * as utils from '../../utils/utils';
 
 describe('BackToTop', () => {

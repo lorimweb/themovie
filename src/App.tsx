@@ -7,7 +7,7 @@ import Home from './components/Home'
 import Banner from './components/Banner'
 import Footer from './components/Footer'
 import MovieDetail from './components/MovieDetail'
-import BackToTop from './components/BackToTop'
+import BackToTop from './components/BackToTop/BackToTop'
 import { theme } from './theme'
 
 const AppWrapper = styled.div`

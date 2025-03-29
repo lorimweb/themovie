@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import { Button } from 'react-bootstrap';
 import { FaArrowUp } from 'react-icons/fa';
-import { scrollToTop } from '../utils/utils';
+import { scrollToTop } from '../../utils/utils';
+import { StyledBackToTopButton } from './BackToTop.styles';
 
 const BackToTop = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -27,24 +27,13 @@ const BackToTop = () => {
   return (
     <>
       {isVisible && (
-        <Button
+        <StyledBackToTopButton
           variant="danger"
-          className="rounded-circle d-flex align-items-center justify-content-center"
           onClick={goToTop}
-          style={{
-            position: 'fixed',
-            bottom: isMobile ? '16px' : '20px',
-            right: isMobile ? '16px' : '20px',
-            zIndex: 1000,
-            width: isMobile ? '36px' : '40px',
-            height: isMobile ? '36px' : '40px',
-            opacity: 0.8,
-            backgroundColor: '#d9292a',
-            padding: 0
-          }}
+          $isMobile={isMobile}
         >
           <FaArrowUp />
-        </Button>
+        </StyledBackToTopButton>
       )}
     </>
   );
