@@ -31,7 +31,7 @@ const MovieItem = ({ movie }: MovieItemProps) => {
         <GradientOverlay>
           <MovieTitle>{movie.title}</MovieTitle>
           <RatingContainer>
-            <StarContainer>
+            <StarContainer data-testid="star-container">
               {renderStars(movie.vote_average)}
             </StarContainer>
             <RatingNumber>({movie.vote_average.toFixed(1)})</RatingNumber>

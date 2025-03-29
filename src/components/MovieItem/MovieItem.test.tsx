@@ -1,6 +1,8 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { ThemeProvider } from 'styled-components';
+import { theme } from '../../theme';
 import type { Movie } from '../../types/movie';
 import MovieItem from '../MovieItem/MovieItem';
 
@@ -29,35 +31,44 @@ describe('MovieItem', () => {
     vi.clearAllMocks();
   });
 
-  it('renders movie title and rating', () => {
-    render(
-      <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
-        <MovieItem movie={mockMovie} />
-      </BrowserRouter>
+  const renderWithProviders = (component: React.ReactNode) => {
+    return render(
+      <ThemeProvider theme={theme}>
+        <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+          {component}
+        </BrowserRouter>
+      </ThemeProvider>
     );
+  };
+
+  it('renders movie title and rating', () => {
+    renderWithProviders(<MovieItem movie={mockMovie} />);
 
     expect(screen.getByText('Test Movie')).toBeInTheDocument();
     expect(screen.getByText('(8.4)')).toBeInTheDocument();
   });
 
+  it('renders the correct star rating visualization', () => {
+    renderWithProviders(<MovieItem movie={mockMovie} />);
+
+    const starContainer = screen.getByTestId('star-container');
+    expect(starContainer).toBeInTheDocument();
+    // With vote_average of 8.4, we expect 8 full stars (rounded from 8.4 in a 10-star system)
+    expect(starContainer.querySelectorAll('[data-testid="star-full"]')).toHaveLength(8);
+    expect(starContainer.querySelectorAll('[data-testid="star-half"]')).toHaveLength(1);
+    expect(starContainer.querySelectorAll('[data-testid="star-empty"]')).toHaveLength(1);
+  });
+
   it('renders placeholder image when poster_path is null', () => {
     const movieWithoutPoster = { ...mockMovie, poster_path: null };
-    render(
-      <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
-        <MovieItem movie={movieWithoutPoster} />
-      </BrowserRouter>
-    );
+    renderWithProviders(<MovieItem movie={movieWithoutPoster} />);
 
     const img = screen.getByRole('img');
     expect(img).toHaveAttribute('src', 'https://via.placeholder.com/342x513?text=No+Image');
   });
 
   it('navigates to movie detail page when clicked', () => {
-    render(
-      <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
-        <MovieItem movie={mockMovie} />
-      </BrowserRouter>
-    );
+    renderWithProviders(<MovieItem movie={mockMovie} />);
 
     const card = screen.getByRole('img').parentElement?.parentElement;
     fireEvent.click(card!);
