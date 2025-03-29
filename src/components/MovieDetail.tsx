@@ -6,10 +6,11 @@ import { useTranslation } from 'react-i18next';
 import { getMovieDetails } from '../services/api';
 import type { Movie } from '../types/movie';
 
+// This function renders stars based on the movie rating
 const renderStars = (rating: number) => {
   const stars = [];
   const roundedRating = Math.round(rating * 2) / 2;
-  for (let i = 1; i <= 5; i++) {
+  for (let i = 1; i <= 10; i++) {
     if (i <= roundedRating) {
       stars.push(<FaStar key={i} className="text-warning" />);
     } else if (i - 0.5 === roundedRating) {
@@ -29,6 +30,8 @@ const MovieDetail = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+
+    // Fetch movie details when the component mounts or when the id changes
     const fetchMovieDetails = async () => {
       if (!id) return;
       try {
@@ -40,10 +43,12 @@ const MovieDetail = () => {
         setLoading(false);
       }
     };
-
+    
+    // Call the function to fetch movie details
     fetchMovieDetails();
   }, [id]);
 
+  // Handle loading state and error state
   if (loading) {
     return (
       <Container className="text-center py-5">
@@ -54,6 +59,7 @@ const MovieDetail = () => {
     );
   }
 
+  // Handle case when movie is not found
   if (!movie) {
     return (
       <Container className="text-center py-5">
@@ -90,7 +96,7 @@ const MovieDetail = () => {
 
             <div className="d-flex align-items-center gap-2">
               <div className="d-flex">
-                {renderStars(movie.vote_average / 2)}
+                {renderStars(movie.vote_average)}
               </div>
               <span className="text-white">
                 ({movie.vote_average.toFixed(1)}/10 {t('movieDetail.votes', { count: movie.vote_count })})
