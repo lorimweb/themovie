@@ -4,7 +4,7 @@ import { ThemeProvider } from 'styled-components'
 import styled from 'styled-components'
 import Header from './components/Header'
 import Home from './components/Home'
-import Banner from './components/Banner'
+import Banner from './components/Banner/Banner'
 import Footer from './components/Footer'
 import MovieDetail from './components/MovieDetail'
 import BackToTop from './components/BackToTop/BackToTop'
@@ -18,7 +18,7 @@ const AppWrapper = styled.div`
 `;
 
 const MainContainer = styled(Container)`
-  padding: ${({ theme }) => theme.spacing.lg} 0;
+  padding: ${({ theme }) => theme.spacing.md};
   flex-grow: 1;
   max-width: 1200px;
 `;
