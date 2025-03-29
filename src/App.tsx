@@ -1,28 +1,46 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { Container } from 'react-bootstrap'
+import { ThemeProvider } from 'styled-components'
+import styled from 'styled-components'
 import Header from './components/Header'
 import Home from './components/Home'
 import Banner from './components/Banner'
 import Footer from './components/Footer'
 import MovieDetail from './components/MovieDetail'
 import BackToTop from './components/BackToTop'
+import { theme } from './theme'
+
+const AppWrapper = styled.div`
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #1a1a1a;
+`;
+
+const MainContainer = styled(Container)`
+  padding: ${({ theme }) => theme.spacing.lg} 0;
+  flex-grow: 1;
+  max-width: 1200px;
+`;
 
 function App() {
   return (
-    <BrowserRouter>
-      <div className="min-vh-100 d-flex flex-column" style={{ backgroundColor: '#1a1a1a' }}>
-        <Header />
-        <Banner />
-        <Container className="py-4 flex-grow-1" style={{ maxWidth: 1200 }}>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/movie/:id" element={<MovieDetail />} />
-          </Routes>
-        </Container>
-        <Footer />
-        <BackToTop />
-      </div>
-    </BrowserRouter>
+    <ThemeProvider theme={theme}>
+      <BrowserRouter>
+        <AppWrapper>
+          <Header />
+          <Banner />
+          <MainContainer>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/movie/:id" element={<MovieDetail />} />
+            </Routes>
+          </MainContainer>
+          <Footer />
+          <BackToTop />
+        </AppWrapper>
+      </BrowserRouter>
+    </ThemeProvider>
   )
 }
 
