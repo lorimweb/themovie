@@ -1,7 +1,9 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import BackToTop from '../BackToTop/BackToTop';
 import * as utils from '../../utils/utils';
+import { ThemeProvider } from 'styled-components';
+import { theme } from '../../theme';
 
 describe('BackToTop', () => {
   beforeEach(() => {
@@ -13,30 +15,41 @@ describe('BackToTop', () => {
     });
 
     // Reset scroll position
-    window.scrollY = 0;
+    Object.defineProperty(window, 'scrollY', {
+      writable: true,
+      configurable: true,
+      value: 0,
+    });
 
     // Mock window.scrollTo
     window.scrollTo = vi.fn();
   });
 
   afterEach(() => {
-    // Clean up mocks
     vi.clearAllMocks();
   });
 
+  const renderWithTheme = () => {
+    return render(
+      <ThemeProvider theme={theme}>
+        <BackToTop />
+      </ThemeProvider>
+    );
+  };
+
   it('should not show button when page is at top', () => {
-    render(<BackToTop />);
+    renderWithTheme();
     const button = screen.queryByRole('button');
     expect(button).not.toBeInTheDocument();
   });
 
-  it('should show button when page is scrolled down', () => {
-    render(<BackToTop />);
+  it('should show button when page is scrolled down beyond 300px', () => {
+    renderWithTheme();
 
-    // Simulate scrolling down
+    // Simulate scrolling down past threshold
     Object.defineProperty(window, 'scrollY', {
-      value: 400,
-      writable: true,
+      value: 301,
+      configurable: true,
     });
 
     fireEvent.scroll(window);
@@ -45,17 +58,36 @@ describe('BackToTop', () => {
     expect(button).toBeInTheDocument();
   });
 
-  it('should call scrollToTop when button is clicked', () => {
-    const scrollToTopSpy = vi.spyOn(utils, 'scrollToTop');
+  it('should hide button when page is scrolled back up', () => {
+    renderWithTheme();
 
-    render(<BackToTop />);
-
-    // Simulate scrolling down to make button visible
+    // First scroll down
     Object.defineProperty(window, 'scrollY', {
       value: 400,
-      writable: true,
+      configurable: true,
     });
+    fireEvent.scroll(window);
 
+    // Then scroll back up
+    Object.defineProperty(window, 'scrollY', {
+      value: 200,
+      configurable: true,
+    });
+    fireEvent.scroll(window);
+
+    const button = screen.queryByRole('button');
+    expect(button).not.toBeInTheDocument();
+  });
+
+  it('should call scrollToTop with correct parameters when clicked', () => {
+    const scrollToTopSpy = vi.spyOn(utils, 'scrollToTop');
+    renderWithTheme();
+
+    // Make button visible
+    Object.defineProperty(window, 'scrollY', {
+      value: 400,
+      configurable: true,
+    });
     fireEvent.scroll(window);
 
     const button = screen.getByRole('button');
@@ -64,28 +96,87 @@ describe('BackToTop', () => {
     expect(scrollToTopSpy).toHaveBeenCalledWith(0, 'smooth');
   });
 
-  it('should adjust size for mobile screens', () => {
+  it('should apply mobile styles when screen width is <= 768px', () => {
     // Set mobile window width
     Object.defineProperty(window, 'innerWidth', {
+      configurable: true,
       value: 768,
+      writable: true
     });
 
-    render(<BackToTop />);
+    renderWithTheme();
 
     // Make button visible
     Object.defineProperty(window, 'scrollY', {
       value: 400,
-      writable: true,
+      configurable: true,
     });
-
     fireEvent.scroll(window);
 
     const button = screen.getByRole('button');
     expect(button).toHaveStyle({
-      width: '36px',
-      height: '36px',
       bottom: '16px',
       right: '16px',
+      width: '36px',
+      height: '36px'
     });
+  });
+
+  it('should update styles when window is resized', async () => {
+    // Start with desktop width
+    Object.defineProperty(window, 'innerWidth', {
+      configurable: true,
+      value: 1024,
+      writable: true
+    });
+
+    renderWithTheme();
+
+    // Make button visible
+    Object.defineProperty(window, 'scrollY', {
+      value: 400,
+      configurable: true,
+    });
+    fireEvent.scroll(window);
+
+    const button = screen.getByRole('button');
+    
+    // Verify desktop styles
+    await waitFor(() => {
+      expect(button).toHaveStyle({
+        bottom: '20px',
+        right: '20px',
+        width: '40px',
+        height: '40px'
+      });
+    });
+
+    // Change to mobile width
+    Object.defineProperty(window, 'innerWidth', {
+      configurable: true,
+      value: 768,
+      writable: true
+    });
+
+    fireEvent.resize(window);
+    
+    // Verify mobile styles
+    await waitFor(() => {
+      expect(button).toHaveStyle({
+        bottom: '16px',
+        right: '16px',
+        width: '36px',
+        height: '36px'
+      });
+    });
+  });
+
+  it('should remove scroll event listener on unmount', () => {
+    const removeEventListenerSpy = vi.spyOn(window, 'removeEventListener');
+    const { unmount } = renderWithTheme();
+
+    unmount();
+
+    expect(removeEventListenerSpy).toHaveBeenCalledWith('scroll', expect.any(Function));
   });
 });

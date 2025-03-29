@@ -5,7 +5,11 @@ import { StyledBackToTopButton } from './BackToTop.styles';
 
 const BackToTop = () => {
   const [isVisible, setIsVisible] = useState(false);
-  const isMobile = window.innerWidth <= 768;
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+
+  const handleResize = () => {
+    setIsMobile(window.innerWidth <= 768);
+  };
 
   const toggleVisibility = () => {
     if (window.scrollY > 300) {
@@ -16,8 +20,17 @@ const BackToTop = () => {
   };
 
   useEffect(() => {
+    window.addEventListener('resize', handleResize);
     window.addEventListener('scroll', toggleVisibility);
-    return () => window.removeEventListener('scroll', toggleVisibility);
+    
+    // Call once to set initial state
+    handleResize();
+    toggleVisibility();
+    
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      window.removeEventListener('scroll', toggleVisibility);
+    };
   }, []);
 
   const goToTop = () => {
