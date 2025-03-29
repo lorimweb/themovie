@@ -3,8 +3,8 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { Container, Row, Col, Button, Card, Spinner, Badge } from 'react-bootstrap';
 import { FaStar, FaStarHalfAlt, FaRegStar } from 'react-icons/fa';
 import { useTranslation } from 'react-i18next';
-import { getMovieDetails } from '../services/api';
-import type { Movie } from '../types/movie';
+import { getMovieDetails } from '../../services/api';
+import type { Movie } from '../../types/movie';
 
 // This function renders stars based on the movie rating
 const renderStars = (rating: number) => {

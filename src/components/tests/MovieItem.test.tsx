@@ -2,7 +2,7 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { Movie } from '../../types/movie';
-import MovieItem from '../MovieItem';
+import MovieItem from '../MovieItem/MovieItem';
 
 const mockNavigate = vi.fn();
 vi.mock('react-router-dom', async () => {

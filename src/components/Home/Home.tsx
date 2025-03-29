@@ -4,10 +4,10 @@ import { FaSearch } from 'react-icons/fa'
 import Carousel from 'react-multi-carousel'
 import 'react-multi-carousel/lib/styles.css'
 import { useTranslation } from 'react-i18next'
-import { getPopularMovies, searchMovies } from '../services/api'
-import type { Movie } from '../types/movie'
-import MovieItem from './MovieItem'
-import { responsive } from '../mocks/carousel.mock'
+import { getPopularMovies, searchMovies } from '../../services/api'
+import type { Movie } from '../../types/movie'
+import { responsive } from '../../mocks/carousel.mock'
+import MovieItem from '../MovieItem/MovieItem'
 
 const Home = () => {
   const { t } = useTranslation();

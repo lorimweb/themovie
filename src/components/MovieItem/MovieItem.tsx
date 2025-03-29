@@ -1,6 +1,6 @@
 import { Card } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
-import type { Movie } from '../types/movie';
+import type { Movie } from '../../types/movie';
 import { FaStar, FaStarHalfAlt, FaRegStar } from 'react-icons/fa';
 
 interface MovieItemProps {
