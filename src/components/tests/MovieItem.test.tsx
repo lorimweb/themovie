@@ -1,8 +1,8 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
-import { MemoryRouter } from 'react-router-dom';
-import MovieItem from '../MovieItem';
+import { fireEvent, render, screen } from '@testing-library/react';
+import { BrowserRouter } from 'react-router-dom';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { Movie } from '../../types/movie';
+import MovieItem from '../MovieItem';
 
 const mockNavigate = vi.fn();
 vi.mock('react-router-dom', async () => {
@@ -31,9 +31,9 @@ describe('MovieItem', () => {
 
   it('renders movie title and rating', () => {
     render(
-      <MemoryRouter>
+      <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
         <MovieItem movie={mockMovie} />
-      </MemoryRouter>
+      </BrowserRouter>
     );
 
     expect(screen.getByText('Test Movie')).toBeInTheDocument();
@@ -43,9 +43,9 @@ describe('MovieItem', () => {
   it('renders placeholder image when poster_path is null', () => {
     const movieWithoutPoster = { ...mockMovie, poster_path: null };
     render(
-      <MemoryRouter>
+      <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
         <MovieItem movie={movieWithoutPoster} />
-      </MemoryRouter>
+      </BrowserRouter>
     );
 
     const img = screen.getByRole('img');
@@ -54,9 +54,9 @@ describe('MovieItem', () => {
 
   it('navigates to movie detail page when clicked', () => {
     render(
-      <MemoryRouter>
+      <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
         <MovieItem movie={mockMovie} />
-      </MemoryRouter>
+      </BrowserRouter>
     );
 
     const card = screen.getByRole('img').parentElement?.parentElement;
