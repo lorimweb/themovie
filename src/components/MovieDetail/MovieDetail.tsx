@@ -18,22 +18,7 @@ import {
   SectionText,
   YearBadge
 } from './MovieDetail.styles';
-
-// This function renders stars based on the movie rating
-const renderStars = (rating: number) => {
-  const stars = [];
-  const roundedRating = Math.round(rating * 2) / 2;
-  for (let i = 1; i <= 10; i++) {
-    if (i <= roundedRating) {
-      stars.push(<FaStar key={i} className="text-warning" />);
-    } else if (i - 0.5 === roundedRating) {
-      stars.push(<FaStarHalfAlt key={i} className="text-warning" />);
-    } else {
-      stars.push(<FaRegStar key={i} className="text-warning" />);
-    }
-  }
-  return stars;
-};
+import { renderStars } from '../../utils/utils';
 
 const MovieDetail = () => {
   const { id } = useParams();
