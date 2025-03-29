@@ -1,10 +1,23 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Container, Row, Col, Button, Card, Spinner, Badge } from 'react-bootstrap';
+import { Row, Col, Spinner, Card } from 'react-bootstrap';
 import { FaStar, FaStarHalfAlt, FaRegStar } from 'react-icons/fa';
 import { useTranslation } from 'react-i18next';
 import { getMovieDetails } from '../../services/api';
 import type { Movie } from '../../types/movie';
+import {
+  StyledContainer,
+  BackButton,
+  MovieCard,
+  MovieInfo,
+  RatingContainer,
+  RatingStars,
+  RatingText,
+  MovieTitle,
+  SectionTitle,
+  SectionText,
+  YearBadge
+} from './MovieDetail.styles';
 
 // This function renders stars based on the movie rating
 const renderStars = (rating: number) => {
@@ -51,37 +64,35 @@ const MovieDetail = () => {
   // Handle loading state and error state
   if (loading) {
     return (
-      <Container className="text-center py-5">
+      <StyledContainer className="text-center py-5">
         <Spinner animation="border" role="status">
           <span className="visually-hidden">{t('home.loading')}</span>
         </Spinner>
-      </Container>
+      </StyledContainer>
     );
   }
 
   // Handle case when movie is not found
   if (!movie) {
     return (
-      <Container className="text-center py-5">
+      <StyledContainer className="text-center py-5">
         <h3>Movie not found</h3>
-      </Container>
+      </StyledContainer>
     );
   }
 
   return (
-    <Container className="py-4">
-      <Button
+    <StyledContainer>
+      <BackButton
         variant="danger"
         onClick={() => navigate('/')}
-        className="mb-4"
-        style={{ backgroundColor: '#d9292a' }}
       >
         {t('movieDetail.backToHome')}
-      </Button>
+      </BackButton>
 
       <Row className="g-4">
         <Col xs={12} md={4}>
-          <Card className="h-100 border-2" style={{ borderColor: '#d9292a' }}>
+          <MovieCard>
             <Card.Img
               src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
               alt={movie.title}
@@ -90,40 +101,40 @@ const MovieDetail = () => {
                 e.currentTarget.src = 'https://via.placeholder.com/500x750?text=No+Image';
               }}
             />
-          </Card>
+          </MovieCard>
         </Col>
         <Col xs={12} md={8}>
-          <div className="d-flex flex-column gap-4">
-            <h2 className="text-white mb-0">{movie.title}</h2>
+          <MovieInfo>
+            <MovieTitle>{movie.title}</MovieTitle>
 
-            <div className="d-flex align-items-center gap-2">
-              <div className="d-flex">
+            <RatingContainer>
+              <RatingStars>
                 {renderStars(movie.vote_average)}
-              </div>
-              <span className="text-white">
+              </RatingStars>
+              <RatingText>
                 ({movie.vote_average.toFixed(1)}/10 {t('movieDetail.votes', { count: movie.vote_count })})
-              </span>
-            </div>
+              </RatingText>
+            </RatingContainer>
 
-            <Badge bg="primary" style={{ fontSize: '1rem', maxWidth: '100px' }}>
+            <YearBadge>
               {new Date(movie.release_date).getFullYear()}
-            </Badge>
+            </YearBadge>
 
-            <div className="text-white">
-              <h5>{t('movieDetail.overview')}</h5>
-              <p>{movie.overview}</p>
+            <div>
+              <SectionTitle>{t('movieDetail.overview')}</SectionTitle>
+              <SectionText>{movie.overview}</SectionText>
             </div>
 
-            <div className="text-white">
-              <h5>{t('movieDetail.releaseDate')}</h5>
-              <p className="mb-0">
+            <div>
+              <SectionTitle>{t('movieDetail.releaseDate')}</SectionTitle>
+              <SectionText>
                 {new Date(movie.release_date).toLocaleDateString()}
-              </p>
+              </SectionText>
             </div>
-          </div>
+          </MovieInfo>
         </Col>
       </Row>
-    </Container>
+    </StyledContainer>
   );
 };
 
