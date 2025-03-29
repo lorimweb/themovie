@@ -43,7 +43,7 @@ const MovieDetail = () => {
         setLoading(false);
       }
     };
-    
+
     // Call the function to fetch movie details
     fetchMovieDetails();
   }, [id]);
@@ -78,17 +78,19 @@ const MovieDetail = () => {
       >
         {t('movieDetail.backToHome')}
       </Button>
-      
+
       <Row className="g-4">
         <Col xs={12} md={4}>
-          <Card.Img
-            src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-            alt={movie.title}
-            className="rounded"
-            onError={(e: React.SyntheticEvent<HTMLImageElement>) => {
-              e.currentTarget.src = 'https://via.placeholder.com/500x750?text=No+Image';
-            }}
-          />
+          <Card className="h-100 border-2" style={{ borderColor: '#d9292a' }}>
+            <Card.Img
+              src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+              alt={movie.title}
+              className="rounded"
+              onError={(e: React.SyntheticEvent<HTMLImageElement>) => {
+                e.currentTarget.src = 'https://via.placeholder.com/500x750?text=No+Image';
+              }}
+            />
+          </Card>
         </Col>
         <Col xs={12} md={8}>
           <div className="d-flex flex-column gap-4">
@@ -103,7 +105,7 @@ const MovieDetail = () => {
               </span>
             </div>
 
-            <Badge bg="primary" className="w-auto">
+            <Badge bg="primary" style={{ fontSize: '1rem', maxWidth: '100px' }}>
               {new Date(movie.release_date).getFullYear()}
             </Badge>
 
