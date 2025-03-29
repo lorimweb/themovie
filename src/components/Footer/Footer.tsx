@@ -1,16 +1,16 @@
-import { Container } from 'react-bootstrap';
 import { FaGithub, FaTwitter, FaLinkedin } from 'react-icons/fa';
 import { useTranslation } from 'react-i18next';
+import { FooterWrapper, StyledContainer, ContentWrapper, SocialLinks, Copyright } from './Footer.styles';
 
 const Footer = () => {
   const { t } = useTranslation();
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="py-4 mt-auto" style={{ background: '#1a1a1a' }}>
-      <Container className="text-center" style={{ maxWidth: 1200 }}>
-        <div className="d-flex flex-column align-items-center gap-3">
-          <div className="d-flex gap-4">
+    <FooterWrapper>
+      <StyledContainer>
+        <ContentWrapper>
+          <SocialLinks>
             <a href="https://github.com" target="_blank" rel="noopener noreferrer">
               <FaGithub size={24} color="#fff" />
             </a>
@@ -20,13 +20,13 @@ const Footer = () => {
             <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer">
               <FaLinkedin size={24} color="#fff" />
             </a>
-          </div>
-          <p className="mb-0" style={{ color: 'rgba(255,255,255,0.8)' }}>
+          </SocialLinks>
+          <Copyright>
             {t('footer.rights', { year: currentYear })}
-          </p>
-        </div>
-      </Container>
-    </footer>
+          </Copyright>
+        </ContentWrapper>
+      </StyledContainer>
+    </FooterWrapper>
   );
 };
 
