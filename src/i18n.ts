@@ -21,6 +21,10 @@ i18n
       },
     },
     fallbackLng: 'en',
+    detection: {
+      order: ['navigator'],
+      caches: [],
+    },
     interpolation: {
       escapeValue: false,
     },
